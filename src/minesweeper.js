@@ -1,15 +1,19 @@
-const blankLine = "  |   |  "
-const guessLine = "1 |   |  "
-const bombLine  = "  | B |  "
+const board = []
 
-console.log("This is what an empty board would look like:")
+const printBoard = (board) => {
+	console.log("Current board:")
+	board.forEach(elem => console.log(elem.join(" | ")))
+}
 
-console.log(blankLine)
-console.log(blankLine)
-console.log(blankLine)
+// create empty board
+board.push([],[],[])
+board.forEach(elem => elem.push(" ", " ", " "))
 
-console.log("This is what a board with a guess and a bomb on it would look like:")
+// kick things off
+printBoard(board)
 
-console.log(guessLine)
-console.log(bombLine)
-console.log(blankLine)
+// test manual board manipulation
+board[0][1] = "1"
+board[2][2] = "B"
+
+printBoard(board)
