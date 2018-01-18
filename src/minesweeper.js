@@ -15,16 +15,24 @@ const generatePlayerBoard = (numRows, numCols) => {
 }
 
 const generateBombBoard = (numRows, numCols, numBombs) => {
+	
+	if (numBombs >= numRows * numCols) { 
+		console.log('Error: More bombs than space available on requested board!')
+		return []
+	}
+
 	const board = generateBoard(numRows, numCols, null)
 	
 	let numBombsPlaced = 0
 
-	while (numBombsPlaced <= numBombs) {		
+	while (numBombsPlaced < numBombs) {		
 		const randomRowIndex = Math.floor(Math.random() * numRows)
 		const randomColIndex = Math.floor(Math.random() * numCols)
-		// required: check if location already contains a bomb
-		board[randomRowIndex][randomColIndex] = 'B'
-		numBombsPlaced++
+		// only place a bomb if the selected field is not null
+		if (!board[randomRowIndex][randomColIndex]) {
+			board[randomRowIndex][randomColIndex] = 'B'
+			numBombsPlaced++
+		}
 	}
 
 	return board
@@ -38,7 +46,7 @@ const printBoard = board => {
 }
 
 const playerBoard = generatePlayerBoard(3,3)
-const bombBoard = generateBombBoard(3,3,5)
+const bombBoard = generateBombBoard(3,3,3)
 
 console.log('Player Board: ')
 printBoard(playerBoard)
