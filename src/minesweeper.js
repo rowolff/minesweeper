@@ -29,8 +29,8 @@ const generateBombBoard = (numRows, numCols, numBombs) => {
 	while (numBombsPlaced < numBombs) {		
 		const randomRowIndex = Math.floor(Math.random() * numRows)
 		const randomColIndex = Math.floor(Math.random() * numCols)
-		// only place a bomb if the selected field is null
-		if (!board[randomRowIndex][randomColIndex]) {
+		// only place a bomb if the selected field is not already a bomb
+		if (board[randomRowIndex][randomColIndex] !== 'B') {
 			board[randomRowIndex][randomColIndex] = 'B'
 			numBombsPlaced++
 		}
@@ -76,11 +76,17 @@ const getNumberOfNeighborBombs = (bombBoard, rowIndex, colIndex) => {
 }
 
 const flipTile = (playerBoard, bombBoard, rowIndex, colIndex) => {
+	
+	// about if tile has been flipped before
 	if (playerBoard[rowIndex][colIndex] !== ' ') {
 		console.log('This tile has already been flipped')
 		return
-	} else if (bombBoard[rowIndex][colIndex] === 'B') {
+	}
+
+	// flip "B" or number of adjacent bombs
+	if (bombBoard[rowIndex][colIndex] === 'B') {
 		playerBoard[rowIndex][colIndex] = 'B'
+		// todo: flip all other (unmarked) bombs
 	} else {
 		playerBoard[rowIndex][colIndex] = getNumberOfNeighborBombs(
 											bombBoard, 
