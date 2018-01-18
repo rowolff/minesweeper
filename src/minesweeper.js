@@ -29,7 +29,7 @@ const generateBombBoard = (numRows, numCols, numBombs) => {
 	while (numBombsPlaced < numBombs) {		
 		const randomRowIndex = Math.floor(Math.random() * numRows)
 		const randomColIndex = Math.floor(Math.random() * numCols)
-		// only place a bomb if the selected field is not null
+		// only place a bomb if the selected field is null
 		if (!board[randomRowIndex][randomColIndex]) {
 			board[randomRowIndex][randomColIndex] = 'B'
 			numBombsPlaced++
