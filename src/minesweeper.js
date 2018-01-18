@@ -30,7 +30,7 @@ const generateBombBoard = (numRows, numCols, numBombs) => {
 	return board
 }
 
-const printBoard = (board) => {
+const printBoard = board => {
 	console.log(board
 		.map(row => row.join(' | '))
 		.join('\n')
