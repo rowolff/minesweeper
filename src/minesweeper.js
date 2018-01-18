@@ -1,20 +1,47 @@
-const board = []
-
-const printBoard = board => {
-	console.log("Current board:")
-	board.forEach(elem => console.log(elem.join(" | ")))
+const generateBoard = (numRows, numCols, colContent) => {
+	const board = []
+	for (i = 0; i < numRows; i++) {
+		const row = []
+		for (j = 0; j < numCols; j++) {
+			row.push(colContent)
+		}
+		board.push(row)
+	}
+	return board
 }
 
-// create empty board
-board.push([],[],[])
-board.forEach(elem => elem.push(" ", " ", " "))
+const generatePlayerBoard = (numRows, numCols) => {
+	return generateBoard(numRows, numCols, ' ')
+}
 
-// kick things off
-printBoard(board)
+const generateBombBoard = (numRows, numCols, numBombs) => {
+	const board = generateBoard(numRows, numCols, null)
+	
+	let numBombsPlaced = 0
 
-// test manual board manipulation
-board[0][1] = "1"
-board[2][2] = "B"
+	while (numBombsPlaced <= numBombs) {		
+		const randomRowIndex = Math.floor(Math.random() * numRows)
+		const randomColIndex = Math.floor(Math.random() * numCols)
+		// required: check if location already contains a bomb
+		board[randomRowIndex][randomColIndex] = 'B'
+		numBombsPlaced++
+	}
 
-// print modified board
-printBoard(board)
+	return board
+}
+
+const printBoard = (board) => {
+	console.log(board
+		.map(row => row.join(' | '))
+		.join('\n')
+	)
+}
+
+const playerBoard = generatePlayerBoard(3,3)
+const bombBoard = generateBombBoard(3,3,5)
+
+console.log('Player Board: ')
+printBoard(playerBoard)
+
+console.log('Bomb Board: ')
+printBoard(bombBoard)
