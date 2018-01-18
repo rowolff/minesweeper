@@ -40,16 +40,24 @@ const generateBombBoard = (numRows, numCols, numBombs) => {
 }
 
 const getNumberOfNeighborBombs = (bombBoard, rowIndex, colIndex) => {
+	
+	// offsets for all possible 8 tiles around the selected tile
 	const neighborOffsets = [
 		[-1,-1], [-1,0], [-1,1],
 		[0,-1], [0,1],
 		[1,-1], [1,0], [1,1]
 	]
+
 	const numberOfRows = bombBoard.length
 	const numberofCols = bombBoard[0].length
 
 	let numberOfBombs = 0
 
+	// loop through all possible adjacent tiles,
+	// check if they are valid tiles in the board
+	// and check if there's a bomb on it. If so,
+	// increase the bomb counter:
+	
 	neighborOffsets.forEach(offset => {
 		const neighborRowIndex = rowIndex + offset[0]
 		const neighborColIndex = colIndex + offset[1]
