@@ -1,39 +1,6 @@
-// helpers
+import { Helpers } from './helpers'
 
-const generateBoard = (numRows, numCols, colContent) => {
-	const board = []
-	for (i = 0; i < numRows; i++) {
-		const row = []
-		for (j = 0; j < numCols; j++) {
-			row.push(colContent)
-		}
-		board.push(row)
-	}
-	return board
-}
-
-// classes
-
-class Game {
-  constructor (numRows, numCols, numBombs) {
-    this._board = new Board(numRows, numCols, numBombs)
-  }
-
-  playMove (rowIndex, colIndex) {
-    this._board.flipTile(rowIndex, colIndex)
-    if (this._board.playerBoard[rowIndex][colIndex] === 'B') {
-      console.log('Boom! Game over! Final board:')
-    } else if (!this._board.hasSafeTiles()) {
-      console.log('Congrats, you won!!! Final board:')
-    } else {
-      console.log('Keep going! Current board:')
-    }
-    this._board.print()
-  }
-}
-
-
-class Board {
+export class Board {
   constructor (numRows, numCols, numBombs) {
     this._numBombs = numBombs
     this._numTiles = numRows * numCols
@@ -117,7 +84,7 @@ class Board {
   }
 
   static generatePlayerBoard (numRows, numCols) {
-  	return generateBoard(numRows, numCols, ' ')
+  	return Helpers.generateBoard(numRows, numCols, ' ')
   }
 
   static generateBombBoard (numRows, numCols, numBombs) {
@@ -127,7 +94,7 @@ class Board {
   		return []
   	}
 
-  	const board = generateBoard(numRows, numCols, null)
+  	const board = Helpers.generateBoard(numRows, numCols, null)
 
   	let numBombsPlaced = 0
 
@@ -145,11 +112,3 @@ class Board {
   }
 
 }
-
-// get things rolling
-
-const g = new Game(3,3,3)
-
-g.playMove(0,0)
-g.playMove(1,1)
-g.playMove(1,2)
