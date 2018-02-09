@@ -27,3 +27,6 @@ class Game {
     this._board.print()
   }
 }
+
+// create default game
+let g = new Game(5,5,2)

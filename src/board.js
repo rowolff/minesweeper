@@ -6,10 +6,19 @@ export class Board {
     this._numTiles = numRows * numCols
     this._playerBoard = Board.generatePlayerBoard(numRows, numCols)
     this._bombBoard = Board.generateBombBoard(numRows, numCols, numBombs)
+    this._zeroTiles = []
   }
 
   get playerBoard () {
     return this._playerBoard
+  }
+
+  newZeroTile (tile) {
+    this._zeroTiles.push(tile)
+  }
+
+  isZeroTile (tile) {
+    return this._zeroTiles.some(zeroTile => tile.toString() === zeroTile.toString())
   }
 
   flipTile (rowIndex, colIndex) {
@@ -28,14 +37,21 @@ export class Board {
   											rowIndex,
   											colIndex
   										)
-      // todo: flip all adjacent empty '0' tiles
   	}
     this._numTiles--
   }
 
   getNumberOfNeighborBombs (rowIndex, colIndex) {
 
-  	// offsets for all possible 8 tiles around the selected tile
+  	// if this function is called recursively,
+    // we want to exit immediately if we already know
+    // that the tile to check is safe with 0 bombs surrounding
+    if (this.isZeroTile([rowIndex, colIndex])) {
+      return
+    }
+
+    // if there are bombs around it, get
+    // offsets for all possible 8 tiles around the selected tile
   	const neighborOffsets = [
   		[-1,-1], [-1,0], [-1,1],
   		[0,-1], [0,1],
@@ -44,6 +60,7 @@ export class Board {
 
   	const numberOfRows = this._bombBoard.length
   	const numberofCols = this._bombBoard[0].length
+    const adjacentSafeTiles = []
 
   	let numberOfBombs = 0
 
@@ -55,16 +72,34 @@ export class Board {
   	neighborOffsets.forEach(offset => {
   		const neighborRowIndex = rowIndex + offset[0]
   		const neighborColIndex = colIndex + offset[1]
-  		if (   neighborRowIndex >= 0
+
+  		if ( neighborRowIndex >= 0
   			&& neighborRowIndex < numberOfRows
   			&& neighborColIndex >= 0
   			&& neighborColIndex < numberofCols) {
 
-  			if (this._bombBoard[neighborRowIndex][neighborColIndex] === 'B') {
+        if (this._bombBoard[neighborRowIndex][neighborColIndex] === 'B') {
   				numberOfBombs++
-  			}
+  			} else {
+          adjacentSafeTiles.push([neighborRowIndex, neighborColIndex])
+        }
   		}
+
   	})
+
+    // if the current tile is a safe tile with 0 bombs surrounding
+    // we want to flip all surrounding tiles (recursively)
+    // for convenience
+    if (numberOfBombs === 0) {
+        this.newZeroTile([rowIndex, colIndex])
+        adjacentSafeTiles.forEach(tile => {
+          if (this.getNumberOfNeighborBombs(tile[0], tile[1]) === 0) {
+            this._playerBoard[tile[0]][tile[1]] = 0
+            this._numTiles--
+            this.print()
+          }      
+        })
+    }
 
   	return numberOfBombs
   }
