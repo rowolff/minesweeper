@@ -28,10 +28,15 @@ export class Board {
   		return
   	}
 
-  	// flip "B" or number of adjacent bombs
+  	// flip all bombs or number of adjacent bombs
   	if (this._bombBoard[rowIndex][colIndex] === 'B') {
-  		this._playerBoard[rowIndex][colIndex] = 'B'
-  		// todo: flip all other (unmarked) bombs
+  		this._bombBoard.forEach((row, rowBombIndex) => {
+        row.forEach((column, colBombIndex) => {
+          if (column === 'B') {
+            this._playerBoard[rowBombIndex][colBombIndex] = 'B'
+          }
+        })
+      })
   	} else {
   		this._playerBoard[rowIndex][colIndex] = this.getNumberOfNeighborBombs(
   											rowIndex,
@@ -96,7 +101,6 @@ export class Board {
           if (this.getNumberOfNeighborBombs(tile[0], tile[1]) === 0) {
             this._playerBoard[tile[0]][tile[1]] = 0
             this._numTiles--
-            this.print()
           }      
         })
     }
