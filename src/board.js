@@ -13,11 +13,11 @@ export class Board {
     return this._playerBoard
   }
 
-  newZeroTile (tile) {
+  newSafeTile (tile) {
     this._zeroTiles.push(tile)
   }
 
-  isZeroTile (tile) {
+  isSafeTile (tile) {
     return this._zeroTiles.some(zeroTile => tile.toString() === zeroTile.toString())
   }
 
@@ -51,7 +51,7 @@ export class Board {
   	// if this function is called recursively,
     // we want to exit immediately if we already know
     // that the tile to check is safe with 0 bombs surrounding
-    if (this.isZeroTile([rowIndex, colIndex])) {
+    if (this.isSafeTile([rowIndex, colIndex])) {
       return
     }
 
@@ -94,14 +94,21 @@ export class Board {
 
     // if the current tile is a safe tile with 0 bombs surrounding
     // we want to flip all surrounding tiles (recursively)
-    // for convenience
+    // for convenience. Any tiles we find that are not bombs, we want
+    // to add to the array of safe tiles, to skip them during recursion
     if (numberOfBombs === 0) {
-        this.newZeroTile([rowIndex, colIndex])
+        this.newSafeTile([rowIndex, colIndex])
+        console.log('tiles left to flip: ' + this._numTiles)
         adjacentSafeTiles.forEach(tile => {
-          if (this.getNumberOfNeighborBombs(tile[0], tile[1]) === 0) {
-            this._playerBoard[tile[0]][tile[1]] = 0
+          const adjacentBombCount = this.getNumberOfNeighborBombs(tile[0], tile[1])
+          if (adjacentBombCount !== undefined) {
+            // Error handling!
+            // I don't know why this even can be "undefined"
+            // It's on tiles that contain a bomb - so that's sth to look into...
+            this.newSafeTile([tile[0], tile[1]])
+            this._playerBoard[tile[0]][tile[1]] = adjacentBombCount
             this._numTiles--
-          }      
+          }    
         })
     }
 

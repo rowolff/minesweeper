@@ -29,4 +29,4 @@ class Game {
 }
 
 // create default game
-let g = new Game(5,5,2)
+let g = new Game(10,10,10)
