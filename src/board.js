@@ -98,7 +98,6 @@ export class Board {
     // to add to the array of safe tiles, to skip them during recursion
     if (numberOfBombs === 0) {
         this.newSafeTile([rowIndex, colIndex])
-        console.log('tiles left to flip: ' + this._numTiles)
         adjacentSafeTiles.forEach(tile => {
           const adjacentBombCount = this.getNumberOfNeighborBombs(tile[0], tile[1])
           if (adjacentBombCount !== undefined) {
@@ -108,7 +107,7 @@ export class Board {
             this.newSafeTile([tile[0], tile[1]])
             this._playerBoard[tile[0]][tile[1]] = adjacentBombCount
             this._numTiles--
-          }    
+          }
         })
     }
 
